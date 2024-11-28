@@ -1,3 +1,11 @@
+// variable for guetto image 
+let img;
+
+function preload() {
+  img = loadImage("ghetto.png");
+}
+
+
 function setup() {
   createCanvas(800, 600);
 }
@@ -130,8 +138,18 @@ ellipse(x + 500, y + 215, 10);
 
 pop();
 
+//<<<<<<< HEAD
 }
 function draw() {
   background(0, 0, 0);
   charakterDog();
 }
+//=======
+function draw() {
+  background(0, 0, 0);
+  //image guetto
+  imageMode (CENTER);
+  image(img, width/2, height/2, width, height);
+}
+
+//>>>>>>> c60a0742f420d2a3eccfd58ac454f1303f2f05d4
