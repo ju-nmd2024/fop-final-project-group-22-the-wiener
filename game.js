@@ -1,24 +1,24 @@
 // variable for guetto image 
 let img;
+let imgPolice;
+let imgStartScreen;
+let state = "start";
 
+//images 
 function preload() {
   img = loadImage("ghetto.png");
+  imgPolice = loadImage("policeman.png");
+  imgStartScreen = loadImage("");
 }
 
-
-function setup() {
-  createCanvas(800, 600);
-}
 function charakterDog() {
-  let x = 10;
-let y = 50;
+  let x =880;
+let y = 2400;
 noStroke();
-
-background(0, 0, 0);
 
 push();
 translate();
-scale(0.4);
+scale(0.2);
 
 //tail
 fill(70, 35, 20);
@@ -137,19 +137,78 @@ fill(0, 0, 0);
 ellipse(x + 500, y + 215, 10);
 
 pop();
+}
 
-//<<<<<<< HEAD
+
+function setup() {
+  createCanvas(885, 600);
 }
-function draw() {
-  background(0, 0, 0);
-  charakterDog();
+
+//start screen
+function startScreen() {
+  background (0, 0, 0);
+  image(imgStartScreen, 440, 300, 950, 600);
+  fill (255, 255, 255);
+  textStyle (BOLD);
+  textSize(50);
+  text("STARTE DAS SPIEL!", 240, 266);
+  textSize(20);
+  text("click the screen to start ;)", 345,460);
 }
-//=======
-function draw() {
-  background(0, 0, 0);
+ 
+//game screen 
+function gameScreen() {
+  background(0, 255, 255);
   //image guetto
   imageMode (CENTER);
-  image(img, width/2, height/2, width, height);
+  image(img, 440, 300, 950, 600);
+  image(imgPolice, 84, 450, 150, 200);
+  charakterDog();
 }
 
-//>>>>>>> c60a0742f420d2a3eccfd58ac454f1303f2f05d4
+//results screen
+function resultScreen() {
+  background (255, 40, 60);
+  fill(55, 155, 55);
+  textStyle(BOLD);
+  textSize(50);
+  text("ERGEBNIS", 300, 266);
+}
+
+function mechanics(){
+
+}
+
+function draw() {
+
+  startScreen();
+  
+  gameScreen();
+
+  charakterDog();
+
+
+  if (state === "start") {
+    startScreen();
+  } else if (state=== "game") {
+    mechanics();
+    gameScreen();
+  } else if (state === "result") {
+    resultScreen(); 
+  }
+
+}
+
+//change beetween screens while clicking
+function mouseClicked () {
+  if (state==="start") {
+    state="game";
+  } else if (state==="result"){
+    state= "start";
+  }
+  
+}
+
+
+
+
