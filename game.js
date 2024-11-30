@@ -15,6 +15,8 @@ let x = 525;
 let y = 1420;
 let imgPoliceX = 84;
 let imgPoliceY = 440;
+let platformX = 10;
+let platformY = 10;
 
 //images
 function preload() {
@@ -153,12 +155,12 @@ function charakterDog() {
   ellipse(x + 500, y + 215, 10);
 
   pop();
-}
+}  
 
 function platform() {
-  fill(0, 0, 0);
-  //rect()
-}
+  fill(0, 100, 0);
+  rect(platformX+400,platformY+400,100,20,20);
+} 
 
 function setup() {
   createCanvas(885, 600);
@@ -213,6 +215,7 @@ function gameScreen() {
   }
 image (imgPolice, imgPoliceX, imgPoliceY, 150, 200);
   charakterDog();
+  platform();
 }
    
 //results screen
@@ -237,7 +240,11 @@ function mechanics() {
     y = y + velocityY;
     // Move charater forward
     x = x + velocityX;
+<<<<<<< HEAD
   }   
+=======
+  }  
+>>>>>>> 2e454d7b9ada6fb0d4bb1cf6f4eb3d32628d7ea8
   //jumping effect
   //if (keyIsDown(UP_ARROW)) {
   //velocityX -= boostVelocity;
@@ -247,8 +254,19 @@ function mechanics() {
   } else {
     y = 1420;
   }
+<<<<<<< HEAD
 } 
 
+=======
+  //platform moves in the x direction
+  platformX = platformX - 2;  
+  //reset the x value of the platform to 885, which is the width of the canvas so that it starts from the far right
+    if (platformX < -500) {
+     platformX = width;
+    } 
+}      
+ 
+>>>>>>> 2e454d7b9ada6fb0d4bb1cf6f4eb3d32628d7ea8
 function draw() {
   //startScreen();
 
