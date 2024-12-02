@@ -16,7 +16,7 @@ let x = 525;
 let y = 1420;
 let imgPoliceX = 84;
 let imgPoliceY = 440;
-   
+
 //images
 function preload() {
   img = loadImage("ghetto1.png");

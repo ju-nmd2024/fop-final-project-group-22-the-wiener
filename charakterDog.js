@@ -1,9 +1,7 @@
-class CharakterDog {
-    constructor (characterDog)
-    this.size = 0.3;
-    this.x = 525;
-    this.y = 1420;
-    this. charakterDog = charakterDog;
+export default class CharakterDog {
+    constructor (x, y) {
+    this.x = x;
+    this.y = y;
 }
 
 show() {
@@ -133,17 +131,17 @@ show() {
 }
 movement(){
 //character coordinates
-charakterDog(x, y);
+//charakterDog(x, y);
 //game state and gravity logic
-if (gameState === true) {
+//if (gameState === true) {
   // apply gravity to vertical velocity
-  velocityX = velocityX + acceleration;
+  //velocityX = velocityX + acceleration;
 
-  imgPoliceX = imgPoliceX + velocityX * 0.3;
+  //imgPoliceX = imgPoliceX + velocityX * 0.3;
   // Update vertical position
-  y = y + velocityY;
+ // y = y + velocityY;
   // Move charater forward
-  x = x + velocityX;
+ // x = x + velocityX;
 }  
 //jumping effect
 //if (keyIsDown(UP_ARROW)) {
@@ -153,5 +151,6 @@ if (keyIsDown(UP_ARROW)) {
   y = y - 100;
 } else {
   y = 1420;
+}
 }
 }
