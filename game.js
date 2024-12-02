@@ -1,8 +1,8 @@
 // variable for guetto image
-let currentImageIndex = 0;
-let nextImageIndex = 1;
+let currentImageIndex= 0;
+let nextImageIndex= 1;
 let images = [];
-let velocityImage = 5;
+let velocityImage= 5;
 let offset = 0;
 let state = "start";
 let gameState = true;
@@ -15,21 +15,20 @@ let x = 525;
 let y = 1420;
 let imgPoliceX = 84;
 let imgPoliceY = 440;
-let platformX = 10;
-let platformY = 10;
 
 //images
 function preload() {
   img = loadImage("ghetto1.png");
-  imgTwo = loadImage("ghetto2.png");
-  imgThree = loadImage("ghetto3.png");
-  imgFour = loadImage("ghetto4.png");
+  imgTwo= loadImage("ghetto2.png");
+  imgThree= loadImage("ghetto3.png");
+  imgFour= loadImage("ghetto4.png");
   imgPolice = loadImage("policeman.png");
 
   //store images in an array
-  images = [img, imgTwo, imgThree, imgFour];
+  images= [img, imgTwo, imgThree, imgFour];
 }
-
+ 
+  
 function charakterDog() {
   noStroke();
 
@@ -157,26 +156,15 @@ function charakterDog() {
 }
 
 function platform() {
-  fill(0, 100, 0);
-  rect(platformX + 400, platformY + 450, 100, 20, 20);
-  rect(platformX + 500, platformY + 400, 100, 20, 20);
-  rect(platformX + 600, platformY + 350, 100, 20, 20);
-  rect(platformX + 800, platformY + 450, 100, 20, 20);
-  rect(platformX + 900, platformY + 400, 100, 20, 20);
-  rect(platformX + 1000, platformY + 450, 100, 20, 20);
-  rect(platformX + 1300, platformY + 350, 100, 20, 20);
-  rect(platformX + 1500, platformY + 450, 100, 20, 20);
-  rect(platformX + 1600, platformY + 400, 100, 20, 20);
-  rect(platformX + 1700, platformY + 350, 100, 20, 20);
-  rect(platformX + 1800, platformY + 300, 100, 20, 20);
-  rect(platformX + 1900, platformY + 400, 100, 20, 20);
+  fill(0, 0, 0);
+  //rect()
 }
 
 function setup() {
   createCanvas(885, 600);
   frameRate(30); // control the frame rate for smoother image changes
 }
-
+ 
 //start screen
 function startScreen() {
   background(0, 0, 0);
@@ -205,12 +193,12 @@ function startScreen() {
   fill(255, 255, 255);
   textSize(20);
   text("click the screen to start ;)", 345, 460);
-}
+} 
 
 //game screen
 function gameScreen() {
   offset -= velocityImage;
-  if (offset <= -width) {
+  if (offset <= -width){
     offset = 0;
     currentImageIndex = (currentImageIndex + 1) % images.length;
     nextImageIndex = (currentImageIndex + 1) % images.length;
@@ -218,23 +206,16 @@ function gameScreen() {
 
   //image guetto
   imageMode(CENTER);
-  image(images[currentImageIndex], width / 2 + offset, height / 2, 950, 600);
-  image(
-    images[nextImageIndex],
-    width + width / 2 + offset,
-    height / 2,
-    950,
-    600
-  );
+ image(images[currentImageIndex], width/2 + offset, height/2, 950, 600);
+ image(images[nextImageIndex], width + width/2 + offset, height/ 2, 950,600);
   // draw first image at the end for no gaps
   //if (currentImageIndex === images.length -1) {
-  // image (images[0], width + width/2 + offset, height/ 2, 950, 600);
+   // image (images[0], width + width/2 + offset, height/ 2, 950, 600);
   //}
-  image(imgPolice, imgPoliceX, imgPoliceY, 150, 200);
+image (imgPolice, imgPoliceX, imgPoliceY, 150, 200);
   charakterDog();
-  platform();
 }
-
+   
 //results screen
 function resultScreen() {
   //background(255, 255, 255);
@@ -257,7 +238,7 @@ function mechanics() {
     y = y + velocityY;
     // Move charater forward
     x = x + velocityX;
-  }
+  }   
   //jumping effect
   //if (keyIsDown(UP_ARROW)) {
   //velocityX -= boostVelocity;
@@ -267,13 +248,7 @@ function mechanics() {
   } else {
     y = 1420;
   }
-  //platform moves in the x direction
-  platformX = platformX - 2;
-  //reset the x value of the platform to 885, which is the width of the canvas so that it starts from the far right
-  if (platformX < -2000) {
-    platformX = width;
-  }
-}
+} 
 
 function draw() {
   //startScreen();
