@@ -274,4 +274,4 @@ function mouseClicked() {
   } else if (state === "result") {
     state = "start";
   }
-}
+} 
