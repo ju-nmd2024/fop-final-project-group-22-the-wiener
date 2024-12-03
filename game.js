@@ -86,11 +86,13 @@ function preload() {
   imgPills = loadImage("pills.png");
   imgShoppingbags = loadImage("shoppingbags.png");
   imgTrashCan = loadImage("trash can.png");
+  imgSkizze = loadImage("skizze.png");
+  imgGewonnen = loadImage("ergebnisgut.png");
+  imgVerloren = loadImage("ergebnisverloren.png");
 
   //store images in an array
   images = [img, imgTwo, imgThree, imgFour];
 }
-
 
 function setup() {
   createCanvas(885, 600);
@@ -104,12 +106,11 @@ function setup() {
 
 //start screen
 function startScreen() {
-  background(0, 0, 0);
-  //image(imgStartScreen, 400, 450, 150, 200);
-  fill(255, 255, 255);
-  textStyle(BOLD);
-  textSize(50);
-  text("STARTE DAS SPIEL!", 240, 266);
+  background(255, 255, 255);
+  
+    //image Skizze of the Wiener
+    image(imgSkizze, 50, -10, 800, 500);
+
   //sausage
   noStroke();
   fill(185, 70, 49);
@@ -126,10 +127,10 @@ function startScreen() {
   rotate(-0.5);
   ellipse(0, 0, 30, 20);
   pop();
-
+  // TEXT
   fill(255, 255, 255);
   textSize(20);
-  text("click the screen to start ;)", 345, 460);
+  text("click the screen to start ;)", 360, 460);
 }
 
 //game screen
@@ -161,7 +162,6 @@ function gameScreen() {
   if (imgPoliceX >= imgDogX - 50) {
     state = "result"; // Game Over
   }
-  
 
 }
 
@@ -172,6 +172,7 @@ function resultScreen() {
   textStyle(BOLD);
   textSize(50); 
   text("ERGEBNIS", 300, 266);
+
 }
 
 function mechanics() {
