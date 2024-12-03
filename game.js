@@ -1,5 +1,5 @@
 // variable for guetto image
-var platform1 = [];
+//var platform1 = [];
 let currentImageIndex = 0;
 let nextImageIndex = 1;
 let images = [];
@@ -10,16 +10,70 @@ let gameState = true;
 // variables for the mechanics
 let velocityX = 0;
 let velocityY = 0;
-let acceleration = 0.1;
+let acceleration = 0.4;
 // variables for charakters
-let x = 525;
-let y = 1420;
-let imgPoliceX = 84;
+let imgDogX= 300;
+let imgDogY= 500;
+let imgPoliceX = 80;
 let imgPoliceY = 440;
+let lastDogY;
+let sausages = [];
+
+//array for the good features
+let feature = [
+  // the properties are organized in a way that the collision has the same effect if those are good or bad features
+  // for the good features
+  //"type" is for classifying and separating the good and the bad features 
+  { x: 600, y: 300, type: "good", img: "imgBerlinerLuft" },
+  { x: 1550, y: 425, type: "good", img: "imgClubmate" },
+  { x: 1200, y: 200, type: "good", img: "imgPills" },
+  // for the bad features
+  { x: 700, y: 500, type: "bad", img: "imgConstruction" },
+  { x: 1300, y: 350, type: "bad", img: "imgDynamite" },
+  { x: 900, y: 450, type: "bad", img: "imgPant" },
+  { x: 1100, y: 300, type: "bad", img: "imgShoppingbags" },
+  { x: 800, y: 400, type: "bad", img: "imgTrashCan" }
+];
+
+function drawFeatures(){
+  for (let i = 0 ; i < 3; i ++){
+      let feature = features[i];
+      image(feature.img, feature.x, feature.y, 50, 50 );
+  }
+}
+
+let remainingFeatures = [];
+
+function checkfeatureCollision(){
+  for (let i = 0; i < drawFeatures.length; i++){
+      let feature = features[i];
+      if(
+          imgDogX < feature.x + 50 && imgDogX + 100 > feature.x &&
+          imgDogY < feature.Y + 50 && imgDogY + 80 > feature.y
+      ){
+          if (feature.type === "good"){
+              //if the feature type is good and the dog collects it then the velocity of the dog will increase
+              velocityDogX += 1;
+          } else if (feature.type === "bad"){
+              //and if the feature type is bad then it will decrease the velocity
+              velocityDogX -= 1;
+              //add an if statement for saying "when the velocity of the Dog is equals to 0 then Game Over"
+              if (velocityDogX <= 0){
+                  //when you have the Game Over screen connect it here 
+                  //gameState = "gameOver"
+              }
+          }
+      } else {
+          remainingFeatures.push(feature);
+      }
+  }
+}
 
 //images
 function preload() {
   img = loadImage("ghetto1.png");
+  imgDog = loadImage ("characterDog.png");
+  imgSausage= loadImage ("collectivesausage.png"); 
   imgTwo = loadImage("ghetto2.png");
   imgThree = loadImage("ghetto3.png");
   imgFour = loadImage("ghetto4.png");
@@ -37,138 +91,15 @@ function preload() {
   images = [img, imgTwo, imgThree, imgFour];
 }
 
-function charakterDog() {
-  noStroke();
-
-  push();
-  //   translate();
-  scale(0.3);
-
-  //tail
-  fill(70, 35, 20);
-  push();
-  translate(x + 130, y + 245);
-  rotate(0.8);
-  arc(0, 0, 70, 30, 0, PI);
-  pop();
-
-  //left leg behind
-  push();
-  translate(x + 210, y + 305);
-  rotate(-1.4);
-  fill(70, 35, 20);
-  ellipse(0, 0, 100, 50);
-  pop();
-  push();
-  translate(x + 205, y + 355);
-  rotate(1);
-  fill(70, 35, 20);
-  ellipse(0, 0, 50, 20);
-  pop();
-  fill(70, 35, 20);
-  ellipse(x + 220, y + 370, 27, 17);
-
-  //right leg behind
-  push();
-  translate(x + 370, y + 345);
-  rotate(-1.4);
-  fill(70, 35, 20);
-  ellipse(0, 0, 50, 30);
-  pop();
-  push();
-  translate(x + 375, y + 363);
-  rotate(0.3);
-  fill(70, 35, 20);
-  ellipse(0, 0, 40, 20);
-  pop();
-
-  //body shape
-  fill(101, 67, 33);
-  rect(x + 150, y + 250, 250, 70, 20);
-  ellipse(x + 170, y + 285, 70);
-
-  //left leg forward
-  push();
-  translate(x + 170, y + 320);
-  rotate(-0.5);
-  fill(101, 67, 33);
-  ellipse(0, 0, 100, 50);
-  pop();
-  push();
-  translate(x + 135, y + 353);
-  rotate(1.5);
-  fill(101, 67, 33);
-  ellipse(0, 0, 50, 25);
-  pop();
-  ellipse(x + 145, y + 370, 30, 20);
-
-  //belly
-  push();
-  translate(x + 340, y + 300);
-  rotate(0.2);
-  fill(101, 67, 33);
-  ellipse(0, 0, 200, 80);
-  pop();
-
-  //right leg forward
-  push();
-  translate(x + 410, y + 320);
-  rotate(1);
-  fill(101, 67, 33);
-  ellipse(0, 0, 100, 35);
-  pop();
-  push();
-  translate(x + 440, y + 360);
-  rotate(0.4);
-  fill(101, 67, 33);
-  ellipse(0, 0, 40, 20);
-  pop();
-
-  //neck
-  push();
-  translate(x + 415, y + 287);
-  rotate(1.6);
-  fill(101, 67, 33);
-  ellipse(0, 0, 100, 70);
-  pop();
-  push();
-  translate(x + 415, y + 265);
-  rotate(1.9);
-  fill(101, 67, 33);
-  ellipse(0, 0, 100, 70);
-  pop();
-
-  //head
-  ellipse(x + 430, y + 210, 80);
-
-  //nose
-  ellipse(x + 455, y + 220, 100, 45);
-
-  //ears
-  fill(70, 35, 20);
-  rect(x + 410, y + 170, 30, 27, 5);
-  ellipse(x + 425, y + 200, 30, 60);
-
-  // eyes
-  fill(0, 0, 0);
-  ellipse(x + 453, y + 200, 15);
-  fill(255, 255, 255);
-  ellipse(x + 455, y + 203, 7);
-  ellipse(x + 450, y + 197, 3);
-
-  //nose
-  fill(0, 0, 0);
-  ellipse(x + 500, y + 215, 10);
-
-  pop();
-}
 
 function setup() {
   createCanvas(885, 600);
-  frameRate(30); // control the frame rate for smoother image changes
-  for (let i = 0; i < 1; i++) {
-    platform1[i] = new Platformbl();
-  }
+  frameRate(30); 
+  sausages.push(new Sausage(th))
+  // control the frame rate for smoother image changes
+  // for (let i = 0; i < 1; i++) {
+  //   platform1[i] = new Platformbl();
+  // }
 }
 
 //start screen
@@ -220,16 +151,18 @@ function gameScreen() {
     950,
     600
   );
-  // draw first image at the end for no gaps
-  //if (currentImageIndex === images.length -1) {
-  // image (images[0], width + width/2 + offset, height/ 2, 950, 600);
-  //}
   image(imgPolice, imgPoliceX, imgPoliceY, 150, 200);
-  charakterDog();
-  for (let i = 0; i < 1; i++) {
-    platform1[i].show();
-    platform1[i].movement();
+  image(imgDog, imgDogX, imgDogY, 150, 100);
+  // for (let i = 0; i < 1; i++) {
+  //   platform1[i].show();
+  //   platform1[i].movement();
+  // }
+  // lastDogY=0; //equal to the dogY
+  if (imgPoliceX >= imgDogX - 50) {
+    state = "result"; // Game Over
   }
+  
+
 }
 
 //results screen
@@ -237,28 +170,24 @@ function resultScreen() {
   //background(255, 255, 255);
   fill(55, 155, 55);
   textStyle(BOLD);
-  textSize(50);
+  textSize(50); 
   text("ERGEBNIS", 300, 266);
 }
 
 function mechanics() {
-  //character coordinates
-  charakterDog(x, y);
+
   //game state and gravity logic
-  if (gameState === true) {
+  if (gameState === "game") {
     // apply gravity to vertical velocity
     velocityX = velocityX + acceleration;
 
     imgPoliceX = imgPoliceX + velocityX * 0.3;
     // Update vertical position
-    y = y + velocityY;
+    imgDogY = imgDogY + velocityY;
     // Move charater forward
-    x = x + velocityX;
-  }
-  //jumping effect
-  //if (keyIsDown(UP_ARROW)) {
-  //velocityX -= boostVelocity;
-  //}
+    imgDogX = imgDogX + velocityX;
+  } 
+  
   if (keyIsDown(UP_ARROW)) {
     y = y - 100;
   } else {
@@ -267,12 +196,7 @@ function mechanics() {
 }
 
 function draw() {
-  //startScreen();
-
-  //gameScreen();
-
-  //charakterDog();
-
+ 
   if (state === "start") {
     startScreen();
   } else if (state === "game") {
@@ -281,6 +205,11 @@ function draw() {
   } else if (state === "result") {
     resultScreen();
   }
+
+for (let sausage of sausages){
+image(imgSausage, sausage.x, sausage.y, sausage.width, sausage.height);
+sausage.x -= 10;
+}
 }
 
 //change beetween screens while clicking
@@ -292,43 +221,57 @@ function mouseClicked() {
   }
 }
 
-class Platformbl {
-  constructor() {
-    this.platformX = 10;
-    this.platformY = 10;
+class Sausage {
+  constructor () {
+    this.x = 320;
+    this.y = 500;
+    this.width = 250;
+    this.height = 250;
   }
-  show() {
-    fill(0, 100, 0);
-    rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
-    rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
-    rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
-    rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
-    rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
-    rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
-    rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
-    rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
-    image(imgBerlinerLuft, this.platformX + 650, this.platformY + 315, 30, 80);
-    image(imgTrashCan, this.platformX + 700, this.platformY + 500, 100, 100);
-    image(imgPills, this.platformX + 1550, this.platformY + 425, 80, 80);
-    image(
-      imgShoppingbags,
-      this.platformX + 1200,
-      this.platformY + 500,
-      100,
-      100
-    );
+  draw() {
+    image(this.x, this.y, this.width, this.height);
+  }
   }
 
-  movement() {
-    //platform moves in the x direction
-    this.platformX = this.platformX - 3;
-    //reset the x value of the platform to 885, which is the width of the canvas so that it starts from the far right
-    //if (this.platformX < -2000) {
-    //this.platformX = width;
-    //}
-  }
-}
+// class Platformbl {
+//   constructor() {
+//     this.platformX = 10;
+//     this.platformY = 10;
+//   }
+//   show() { 
+//     fill(0, 100, 0);
+//     rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
+//     rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
+//     rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
+//     rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
+//     rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
+//     rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
+//     rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
+//     rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
+//     rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
+//     rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
+//     rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
+//     rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
+//     image(imgBerlinerLuft, this.platformX + 650, this.platformY + 315, 30, 80);
+//     image(imgTrashCan, this.platformX + 700, this.platformY + 500, 100, 100);
+//     image(imgPills, this.platformX + 1550, this.platformY + 425, 80, 80);
+//     image(imgShoppingbags,this.platformX + 1200, this.platformY + 500,100,100);
+//   }
+
+//   movement(funX, theY, lastTheY) {
+//     if(
+//       funX + 50>= this.platformX &&
+//       funX <= this.platformX + 50 &&
+//       theY >= this.platformY - 60 &&
+//       theY + 50 <= this.platformY &&
+//       theY >= lastTheY 
+//     ) {
+//       //the bottom of the dog should be equal to the top Y value of the platform
+//     }
+
+//     //platform moves in the x direction
+//     this.platformX = this.platformX - 3;
+  
+//   }
+// }
+ 
