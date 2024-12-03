@@ -15,7 +15,7 @@ let acceleration = 0.4;
 let imgDogX= 300;
 let imgDogY= 500;
 let imgPoliceX = 80;
-let imgPoliceY = 440;
+let imgPoliceY = 440; 
 let lastDogY;
 let sausages = [];
 
@@ -265,7 +265,7 @@ class Sausage {
 //       theY >= this.platformY - 60 &&
 //       theY + 50 <= this.platformY &&
 //       theY >= lastTheY 
-//     ) {
+//     ) { 
 //       //the bottom of the dog should be equal to the top Y value of the platform
 //     }
 
