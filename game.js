@@ -1,9 +1,9 @@
 // variable for guetto image
-var platform1 =[];
-let currentImageIndex= 0;
-let nextImageIndex= 1;
+var platform1 = [];
+let currentImageIndex = 0;
+let nextImageIndex = 1;
 let images = [];
-let velocityImage= 5;
+let velocityImage = 5;
 let offset = 0;
 let state = "start";
 let gameState = true;
@@ -16,25 +16,32 @@ let x = 525;
 let y = 1420;
 let imgPoliceX = 84;
 let imgPoliceY = 440;
-   
+
 //images
 function preload() {
   img = loadImage("ghetto1.png");
-  imgTwo= loadImage("ghetto2.png");
-  imgThree= loadImage("ghetto3.png");
-  imgFour= loadImage("ghetto4.png");
+  imgTwo = loadImage("ghetto2.png");
+  imgThree = loadImage("ghetto3.png");
+  imgFour = loadImage("ghetto4.png");
   imgPolice = loadImage("policeman.png");
+  imgBerlinerLuft = loadImage("berlinerluft.png");
+  imgClubmate = loadImage("clubmate.png");
+  imgConstruction = loadImage("construction.png");
+  imgDynamite = loadImage("dynamite.png");
+  imgPant = loadImage("pant.png");
+  imgPills = loadImage("pills.png");
+  imgShoppingbags = loadImage("shoppingbags.png");
+  imgTrashCan = loadImage("trash can.png");
 
   //store images in an array
-  images= [img, imgTwo, imgThree, imgFour];
+  images = [img, imgTwo, imgThree, imgFour];
 }
- 
-  
+
 function charakterDog() {
   noStroke();
 
   push();
-//   translate();
+  //   translate();
   scale(0.3);
 
   //tail
@@ -156,20 +163,14 @@ function charakterDog() {
   pop();
 }
 
-// function platform() {
-//   fill(0, 0, 0);
-//   //rect()
-// }
-
 function setup() {
   createCanvas(885, 600);
   frameRate(30); // control the frame rate for smoother image changes
-  for (let i=0;i<1;i++)
-  {
-    platform1[i]= new Platformbl();
+  for (let i = 0; i < 1; i++) {
+    platform1[i] = new Platformbl();
   }
 }
- 
+
 //start screen
 function startScreen() {
   background(0, 0, 0);
@@ -179,6 +180,7 @@ function startScreen() {
   textSize(50);
   text("STARTE DAS SPIEL!", 240, 266);
   //sausage
+  noStroke();
   fill(185, 70, 49);
   rect(315, 405, 300, 100, 50);
   ellipse(305, 455, 30, 20);
@@ -197,14 +199,12 @@ function startScreen() {
   fill(255, 255, 255);
   textSize(20);
   text("click the screen to start ;)", 345, 460);
-} 
+}
 
 //game screen
 function gameScreen() {
-  
-    
   offset -= velocityImage;
-  if (offset <= -width){
+  if (offset <= -width) {
     offset = 0;
     currentImageIndex = (currentImageIndex + 1) % images.length;
     nextImageIndex = (currentImageIndex + 1) % images.length;
@@ -212,21 +212,26 @@ function gameScreen() {
 
   //image guetto
   imageMode(CENTER);
- image(images[currentImageIndex], width/2 + offset, height/2, 950, 600);
- image(images[nextImageIndex], width + width/2 + offset, height/ 2, 950,600);
+  image(images[currentImageIndex], width / 2 + offset, height / 2, 950, 600);
+  image(
+    images[nextImageIndex],
+    width + width / 2 + offset,
+    height / 2,
+    950,
+    600
+  );
   // draw first image at the end for no gaps
   //if (currentImageIndex === images.length -1) {
-   // image (images[0], width + width/2 + offset, height/ 2, 950, 600);
+  // image (images[0], width + width/2 + offset, height/ 2, 950, 600);
   //}
-image (imgPolice, imgPoliceX, imgPoliceY, 150, 200);
+  image(imgPolice, imgPoliceX, imgPoliceY, 150, 200);
   charakterDog();
-  for (let i=0;i<1;i++)
-    {
-      platform1[i].show();
-      platform1[i].movement();
-    }
+  for (let i = 0; i < 1; i++) {
+    platform1[i].show();
+    platform1[i].movement();
+  }
 }
-   
+
 //results screen
 function resultScreen() {
   //background(255, 255, 255);
@@ -249,7 +254,7 @@ function mechanics() {
     y = y + velocityY;
     // Move charater forward
     x = x + velocityX;
-  }   
+  }
   //jumping effect
   //if (keyIsDown(UP_ARROW)) {
   //velocityX -= boostVelocity;
@@ -259,7 +264,7 @@ function mechanics() {
   } else {
     y = 1420;
   }
-} 
+}
 
 function draw() {
   //startScreen();
@@ -287,33 +292,43 @@ function mouseClicked() {
   }
 }
 
-class Platformbl{
-    constructor(){
-        this.platformX = 10;
-        this.platformY= 10;
-    }
-    show(){
-        fill(0, 100, 0);
-  rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
-  rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
-  rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
-  rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
-  rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
-  rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
-  rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
-  rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
-  rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
-  rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
-  rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
-  rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
-    }
-  
-    movement(){
-         //platform moves in the x direction
-  this.platformX = this.platformX - 2;
-  //reset the x value of the platform to 885, which is the width of the canvas so that it starts from the far right
-  if (this.platformX < -2000) {
-  this.platformX = width;
+class Platformbl {
+  constructor() {
+    this.platformX = 10;
+    this.platformY = 10;
   }
-    }
+  show() {
+    fill(0, 100, 0);
+    rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
+    rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
+    rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
+    rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
+    rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
+    rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
+    rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
+    rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
+    image(imgBerlinerLuft, this.platformX + 650, this.platformY + 315, 30, 80);
+    image(imgTrashCan, this.platformX + 700, this.platformY + 500, 100, 100);
+    image(imgPills, this.platformX + 1550, this.platformY + 425, 80, 80);
+    image(
+      imgShoppingbags,
+      this.platformX + 1200,
+      this.platformY + 500,
+      100,
+      100
+    );
   }
+
+  movement() {
+    //platform moves in the x direction
+    this.platformX = this.platformX - 3;
+    //reset the x value of the platform to 885, which is the width of the canvas so that it starts from the far right
+    //if (this.platformX < -2000) {
+    //this.platformX = width;
+    //}
+  }
+}
