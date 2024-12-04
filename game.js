@@ -98,10 +98,10 @@ function setup() {
   createCanvas(885, 600);
   frameRate(30); 
   sausages.push(new Sausage(th))
-  // control the frame rate for smoother image changes
-  // for (let i = 0; i < 1; i++) {
-  //   platform1[i] = new Platformbl();
-  // }
+  //control the frame rate for smoother image changes
+  for (let i = 0; i < 1; i++) {
+    platform1[i] = new Platformbl();
+  }
 }
 
 //start screen
@@ -154,11 +154,11 @@ function gameScreen() {
   );
   image(imgPolice, imgPoliceX, imgPoliceY, 150, 200);
   image(imgDog, imgDogX, imgDogY, 150, 100);
-  // for (let i = 0; i < 1; i++) {
-  //   platform1[i].show();
-  //   platform1[i].movement();
-  // }
-  // lastDogY=0; //equal to the dogY
+  for (let i = 0; i < 1; i++) {
+    platform1[i].show();
+    platform1[i].movement();
+  }
+  lastDogY=0; //equal to the dogY
   if (imgPoliceX >= imgDogX - 50) {
     state = "result"; // Game Over
   }
@@ -234,45 +234,45 @@ class Sausage {
   }
   }
 
-// class Platformbl {
-//   constructor() {
-//     this.platformX = 10;
-//     this.platformY = 10;
-//   }
-//   show() { 
-//     fill(0, 100, 0);
-//     rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
-//     rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
-//     rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
-//     rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
-//     rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
-//     rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
-//     rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
-//     rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
-//     rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
-//     rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
-//     rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
-//     rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
-//     image(imgBerlinerLuft, this.platformX + 650, this.platformY + 315, 30, 80);
-//     image(imgTrashCan, this.platformX + 700, this.platformY + 500, 100, 100);
-//     image(imgPills, this.platformX + 1550, this.platformY + 425, 80, 80);
-//     image(imgShoppingbags,this.platformX + 1200, this.platformY + 500,100,100);
-//   }
+class Platformbl {
+  constructor() {
+    this.platformX = 10;
+    this.platformY = 10;
+  }
+  show() { 
+    fill(0, 100, 0);
+    rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
+    rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
+    rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
+    rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
+    rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
+    rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
+    rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
+    rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
+    rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
+    image(imgBerlinerLuft, this.platformX + 650, this.platformY + 315, 30, 80);
+    image(imgTrashCan, this.platformX + 700, this.platformY + 500, 100, 100);
+    image(imgPills, this.platformX + 1550, this.platformY + 425, 80, 80);
+    image(imgShoppingbags,this.platformX + 1200, this.platformY + 500,100,100);
+  }
 
-//   movement(funX, theY, lastTheY) {
-//     if(
-//       funX + 50>= this.platformX &&
-//       funX <= this.platformX + 50 &&
-//       theY >= this.platformY - 60 &&
-//       theY + 50 <= this.platformY &&
-//       theY >= lastTheY 
-//     ) { 
-//       //the bottom of the dog should be equal to the top Y value of the platform
-//     }
+  movement(funX, theY, lastTheY) {
+    if(
+      funX + 50>= this.platformX &&
+      funX <= this.platformX + 50 &&
+      theY >= this.platformY - 60 &&
+      theY + 50 <= this.platformY &&
+      theY >= lastTheY 
+    ) { 
+      //the bottom of the dog should be equal to the top Y value of the platform
+    }
 
-//     //platform moves in the x direction
-//     this.platformX = this.platformX - 3;
+    //platform moves in the x direction
+    this.platformX = this.platformX - 3;
   
-//   }
-// }
+  }
+}
  
