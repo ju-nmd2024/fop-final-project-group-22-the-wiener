@@ -1,119 +1,231 @@
 // variable for guetto image
-//var platform1 = [];
-let currentImageIndex = 0;
-let nextImageIndex = 1;
+let platforms =[];
+let currentImageIndex= 0;
+let nextImageIndex= 1;
 let images = [];
-let velocityImage = 5;
+let sausages =[];
+let badFeatures= [];
+let goodFeatures= [];
+let velocityImage= 5;
 let offset = 0;
 let state = "start";
 let gameState = true;
-// variables for the mechanics
-let velocityX = 0;
-let velocityY = 0;
-let acceleration = 0.4;
-// variables for charakters
-let imgDogX= 300;
-let imgDogY= 500;
-let imgPoliceX = 80;
-let imgPoliceY = 440; 
-let lastDogY;
-let sausages = [];
+let imgPoliceX = 84;
+let imgPoliceY = 440;  
+let timer = 120;
+let score = 0; 
 
-//array for the good features
-let feature = [
-  // the properties are organized in a way that the collision has the same effect if those are good or bad features
-  // for the good features
-  //"type" is for classifying and separating the good and the bad features 
-  { x: 600, y: 300, type: "good", img: "imgBerlinerLuft" },
-  { x: 1550, y: 425, type: "good", img: "imgClubmate" },
-  { x: 1200, y: 200, type: "good", img: "imgPills" },
-  // for the bad features
-  { x: 700, y: 500, type: "bad", img: "imgConstruction" },
-  { x: 1300, y: 350, type: "bad", img: "imgDynamite" },
-  { x: 900, y: 450, type: "bad", img: "imgPant" },
-  { x: 1100, y: 300, type: "bad", img: "imgShoppingbags" },
-  { x: 800, y: 400, type: "bad", img: "imgTrashCan" }
-];
-
-function drawFeatures(){
-  for (let i = 0 ; i < 3; i ++){
-      let feature = features[i];
-      image(feature.img, feature.x, feature.y, 50, 50 );
+ 
+ 
+   
+//images
+function preload() {
+    img = loadImage("ghetto1.png");
+    imgDog = loadImage ("characterDog.png");
+    imgSausage= loadImage ("collectivesausage.png"); 
+    imgTwo = loadImage("ghetto2.png");
+    imgThree = loadImage("ghetto3.png");
+    imgFour = loadImage("ghetto4.png");
+    imgPolice = loadImage("policeman.png");
+    imgBerlinerLuft = loadImage("berlinerluft.png");
+    imgClubmate = loadImage("clubmate.png");
+    imgConstruction = loadImage("construction.png");
+    imgDynamite = loadImage("dynamite.png");
+    imgPant = loadImage("pant.png");
+    imgPills = loadImage("pills.png");
+    imgShoppingbags = loadImage("shoppingbags.png");
+    imgTrashCan = loadImage("trash can.png");
+    imgSkizze = loadImage("skizze.png");
+    imgErgebnis = loadImage("ergebnis.png");
+    imgInstructions = loadImage("instructions1.png");
+    imgResult = loadImage ("result.png");
+  
+    //store images of background in an array
+    images = [img, imgTwo, imgThree, imgFour];
   }
+
+ 
+  class Platform{
+    constructor (x, y){
+        this.x = x; 
+        this.y = y;
+        this.width = 100;
+    }
+    show (){
+        push();
+        translate(this.x, this.y);
+        fill (100, 100, 100);
+        rect (0,0, this.width, 20, 20); 
+        pop();
+    }
+    //move with background
+    movement() {
+      this.x -= velocityImage; 
+      if (this.x < -100) { 
+          this.x += width + 100;
+      }
+    }
+} 
+
+// created multiple platforms and its organization 
+for (let i = 0; i< 4; i++) {
+    platforms [i] = new Platform (450 + 200 * i, 400 - 80 * i);
 }
 
-let remainingFeatures = [];
+class Sausage {
+  constructor (x, y) {
+    this.x = x;
+    this.y = y;
+    this.width = 50;
+    this.height = 30;
+  }
+  show () {
+    image (imgSausage, this.x, this. y, this.width, this.height);
+  }
+  //move with background
+  movement() {
+    this.x -= velocityImage; 
+    if (this.x < -100) { 
+        this.x += width + 100;
+    }
+  }
 
-function checkfeatureCollision(){
-  for (let i = 0; i < drawFeatures.length; i++){
-      let feature = features[i];
-      if(
-          imgDogX < feature.x + 50 && imgDogX + 100 > feature.x &&
-          imgDogY < feature.Y + 50 && imgDogY + 80 > feature.y
-      ){
-          if (feature.type === "good"){
-              //if the feature type is good and the dog collects it then the velocity of the dog will increase
-              velocityDogX += 1;
-          } else if (feature.type === "bad"){
-              //and if the feature type is bad then it will decrease the velocity
-              velocityDogX -= 1;
-              //add an if statement for saying "when the velocity of the Dog is equals to 0 then Game Over"
-              if (velocityDogX <= 0){
-                  //when you have the Game Over screen connect it here 
-                  //gameState = "gameOver"
-              }
-          }
+}
+
+
+class BadFeature {
+  constructor (x,y, img) {
+    this.x = x;
+    this.y = y;
+    this.width = 100;
+    this.height = 100;
+    this.img = img; 
+
+  }
+  show() {
+    image(this.img, this.x ,this.y, this.width, this.height);
+  }
+  movement() {
+    this.x -= velocityImage; 
+    if (this.x < -100) { 
+        this.x += width + 100;
+    } 
+  }
+} 
+
+class GoodFeature {
+  constructor (x, y, img) {
+    this.x = x;
+    this.y = y;
+    this.width = 100;
+    this.height = 100;
+    this.img = img; 
+  }
+  show() {
+      if (this.img === imgBerlinerLuft) {
+        let newWidth = 30; 
+        let newHeight = 140; 
+        image(this.img, this.x, this.y, newWidth, newHeight);
       } else {
-          remainingFeatures.push(feature);
+        image(this.img, this.x, this.y, this.width, this.height);
+      }
+    }
+  movement() {
+    this.x -= velocityImage; 
+    if (this.x < -100) { 
+        this.x += width + 100;
+    } 
+}
+}
+
+class Dog {
+    constructor (x, y) {
+        this.x = x;
+        this.y = y; 
+        this.width = 140;
+        this.height = 100;
+        this.velocityY= 0;
+        this.gravity = 1;
+        this.jumping = false;
+    }
+    show (){
+        image(imgDog, this.x, this.y, this.width, this.height);
+    }
+    movement() {
+      //jumping
+      if (keyIsDown(UP_ARROW) && !this.jumping) {
+        this.velocityY =-22;
+        this.jumping = true;
+      }
+  // apply gravity
+    this.velocityY += this.gravity;
+    this.y += this.velocityY;
+  // prevent dog from going below the ground
+  if (this.y >= 505) {
+    this.y = 505;
+    this.velocityY = 0;
+    this.jumping = false;
+  }
+      
+} 
+collision (platform) {
+        // Check if the dog is landing on the platform
+        if (
+          this.x + this.width-40 > platform.x && // Dog is horizontally within the platform
+          this.x < platform.x + platform.width &&
+          this.y + this.height/4 >= platform.y && // Dog's feet touch the platform
+          this.y + this.height/4 <= platform.y + 10 && // Avoid snapping below
+          this.velocityY >= 0 // Only snap if falling
+      ) {
+          this.y = platform.y - this.height/4; // Snap to platform
+          this.velocityY = 0; // Stop vertical movement
+          this.jumping = false; // Allow jump again
       }
   }
 }
 
-//images
-function preload() {
-  img = loadImage("ghetto1.png");
-  imgDog = loadImage ("characterDog.png");
-  imgSausage= loadImage ("collectivesausage.png"); 
-  imgTwo = loadImage("ghetto2.png");
-  imgThree = loadImage("ghetto3.png");
-  imgFour = loadImage("ghetto4.png");
-  imgPolice = loadImage("policeman.png");
-  imgBerlinerLuft = loadImage("berlinerluft.png");
-  imgClubmate = loadImage("clubmate.png");
-  imgConstruction = loadImage("construction.png");
-  imgDynamite = loadImage("dynamite.png");
-  imgPant = loadImage("pant.png");
-  imgPills = loadImage("pills.png");
-  imgShoppingbags = loadImage("shoppingbags.png");
-  imgTrashCan = loadImage("trash can.png");
-  imgSkizze = loadImage("skizze.png");
-  imgGewonnen = loadImage("ergebnisgut.png");
-  imgVerloren = loadImage("ergebnisverloren.png");
-
-  //store images in an array
-  images = [img, imgTwo, imgThree, imgFour];
-}
+let dog = new Dog(300, 505);
 
 function setup() {
   createCanvas(885, 600);
-  frameRate(30); 
-  sausages.push(new Sausage(th))
-  //control the frame rate for smoother image changes
-  for (let i = 0; i < 1; i++) {
-    platform1[i] = new Platformbl();
+  frameRate(30); // control the frame rate for smoother image changes
+  for (let i = 0; i < 4; i++) {
+    platforms[i] = new Platform(450 + 200 * i, 400 - 80 * i);
   }
+  for (let i = 0; i < 10; i++) {
+    sausages[i] = new Sausage(400 + 100 * i, 510);
+  }
+  badFeatures.push(new BadFeature(400, 510, imgTrashCan));
+  badFeatures.push(new BadFeature(700, 510, imgShoppingbags));
+  badFeatures.push(new BadFeature(1000, 510, imgPant));
+  badFeatures.push(new BadFeature(1300, 510, imgDynamite));
+  badFeatures.push(new BadFeature(1600, 510, imgConstruction));
+
+
+  goodFeatures.push(new GoodFeature(platforms[0].x + random(0, platforms[0].width - 50)+20, platforms[0].y - 35, imgPills)); 
+  goodFeatures.push(new GoodFeature(platforms[1].x + random(0, platforms[1].width - 50)+18, platforms[1].y - 50, imgClubmate));
+  goodFeatures.push(new GoodFeature(platforms[2].x + random(0, platforms[2].width - 50)+25, platforms[2].y - 80, imgBerlinerLuft));
+  goodFeatures.push(new GoodFeature(platforms[3].x + random(0, platforms[3].width - 50)+10, platforms[3].y - 50, imgClubmate)); 
+  //create good features on random platfroms
+  // let goodFeatureImages = [imgPills, imgBerlinerLuft, imgClubmate];
+  // for (let img of goodFeatureImages) {
+  //   let randomPlatform = random(platforms);
+  //   let x = randomPlatform.x + random(0, randomPlatform.width - 50); // Randomize within platform width
+  //   let y = randomPlatform.y - 100; // Place slightly above the platform
+  //   goodFeatures.push(new GoodFeature(x, y, img));
+  // }
 }
+
+ 
 
 //start screen
 function startScreen() {
   background(255, 255, 255);
-  
-    //image Skizze of the Wiener
-    image(imgSkizze, 50, -10, 800, 500);
-
+  //image Skizze of the Wiener
+  image(imgSkizze, 50, -10, 800, 500);
   //sausage
+  fill(185, 70, 49); 
   noStroke();
-  fill(185, 70, 49);
   rect(315, 405, 300, 100, 50);
   ellipse(305, 455, 30, 20);
   ellipse(625, 455, 30, 20);
@@ -127,152 +239,137 @@ function startScreen() {
   rotate(-0.5);
   ellipse(0, 0, 30, 20);
   pop();
-  // TEXT
-  fill(255, 255, 255);
+  //text on the sausage
+  fill(255);
   textSize(20);
-  text("click the screen to start ;)", 360, 460);
+  text("click the screen to start ;)", 357, 460);
+  //text for the instructions
+  fill(0);
+  rect(420,530,100,50,20);
+  fill(255);
+  textSize(20);
+  text("rules",445,560);
+} 
+// instruction screen
+function instructionScreen() {
+  image(imgInstructions,0,0,width,height);
 }
 
 //game screen
 function gameScreen() {
+  
   offset -= velocityImage;
-  if (offset <= -width) {
+  if (offset <= -width){
     offset = 0;
     currentImageIndex = (currentImageIndex + 1) % images.length;
     nextImageIndex = (currentImageIndex + 1) % images.length;
   }
 
-  //image guetto
-  imageMode(CENTER);
-  image(images[currentImageIndex], width / 2 + offset, height / 2, 950, 600);
-  image(
-    images[nextImageIndex],
-    width + width / 2 + offset,
-    height / 2,
-    950,
-    600
-  );
-  image(imgPolice, imgPoliceX, imgPoliceY, 150, 200);
-  image(imgDog, imgDogX, imgDogY, 150, 100);
-  for (let i = 0; i < 1; i++) {
-    platform1[i].show();
-    platform1[i].movement();
+imageMode(CENTER);
+image(images[currentImageIndex], width/2 + offset, height/2, 950, 600);
+image(images[nextImageIndex], width + width/2 + offset, height/ 2, 950,600);
+image (imgPolice, imgPoliceX, imgPoliceY, 150, 200);
+for (let platform of platforms){
+    platform.movement();
+    platform.show();
+} 
+
+//from the class
+dog.show();
+
+
+for (let i = sausages.length - 1; i >= 0; i--) {
+  sausages[i].movement();
+  sausages[i].show();
+
+   // sausages when being eaten by the dog
+   if (abs(dog.x - sausages[i].x) < 50 && abs(dog.y - sausages[i].y) < 30) {
+     sausages[i].x=-1000;
+     score += 1;
+   }
   }
-  lastDogY=0; //equal to the dogY
-  if (imgPoliceX >= imgDogX - 50) {
-    state = "result"; // Game Over
-  }
+for (let goodfeature of goodFeatures){
+  if (abs(dog.x-goodfeature.x) < 50 && abs(dog.y-goodfeature.y)<30){
+    goodfeature.x=1000;
+    timer+=10;
+}}
+for (let badfeature of badFeatures){
+  if (abs(dog.x-badfeature.x) < 50 && abs(dog.y-badfeature.y)<30){
+    badfeature.x=1000;
+    timer-=5; 
+}}
+
+  //counter
+  // the following 10 and belonging lines of code were adapted from https://youtu.be/h8dHw1-WbAY?si=athmfyTw1v8b0p18 
+  push();
+  timer -= 1/60;
+  fill(255,0,0);
+  textSize(20);
+  text("Timer:", 9,50);
+  text(round(timer),70,50);
+  textSize(20);
+  text("Score:", 10,70);
+  text(round(score),73,70);
+  pop();
 
 }
 
+   
 //results screen
 function resultScreen() {
-  //background(255, 255, 255);
-  fill(55, 155, 55);
-  textStyle(BOLD);
-  textSize(50); 
-  text("ERGEBNIS", 300, 266);
-
+  image(imgResult, 445, 300 ,width,height);
 }
 
 function mechanics() {
-
-  //game state and gravity logic
-  if (gameState === "game") {
-    // apply gravity to vertical velocity
-    velocityX = velocityX + acceleration;
-
-    imgPoliceX = imgPoliceX + velocityX * 0.3;
-    // Update vertical position
-    imgDogY = imgDogY + velocityY;
-    // Move charater forward
-    imgDogX = imgDogX + velocityX;
-  } 
-  
-  if (keyIsDown(UP_ARROW)) {
-    y = y - 100;
-  } else {
-    y = 1420;
-  }
+  dog.movement();
+for (let platform of platforms){
+  dog.collision(platform);
 }
+ 
+} 
+
 
 function draw() {
- 
+
+  if(timer <= 0){
+    state = "result";
+    timer = 0;
+  } 
+
   if (state === "start") {
     startScreen();
   } else if (state === "game") {
     mechanics();
     gameScreen();
+    for (let sausage of sausages) {
+      sausage.show();
+    }
+    for (let badFeature of badFeatures) {
+      badFeature.movement();
+      badFeature.show();
+    }
+    for (let goodFeature of goodFeatures) {
+      goodFeature.movement();
+      goodFeature.show();
+    }
   } else if (state === "result") {
     resultScreen();
+  } else if ( state === "rules") {
+    instructionScreen();
   }
+} 
 
-for (let sausage of sausages){
-image(imgSausage, sausage.x, sausage.y, sausage.width, sausage.height);
-sausage.x -= 10;
-}
-}
 
 //change beetween screens while clicking
 function mouseClicked() {
-  if (state === "start") {
+
+  if (state === "start" && mouseX > 420 && mouseX < 520 && mouseY > 525 && mouseY < 580 ) {
+    state = "rules";
+  } else if (state === "start" && mouseX > 315 && mouseX < 615 && mouseY > 400 && mouseY < 510 ) {
     state = "game";
-  } else if (state === "result") {
+  }else if (state === "rules" && mouseX > 0 && mouseX < 885 && mouseY > 0 && mouseY < 600) {
     state = "start";
+  }else if (state === "result" && mouseX > 0 && mouseX < 885 && mouseY > 0 && mouseY < 600) {
+      state = "start";
   }
 }
-
-class Sausage {
-  constructor () {
-    this.x = 320;
-    this.y = 500;
-    this.width = 250;
-    this.height = 250;
-  }
-  draw() {
-    image(this.x, this.y, this.width, this.height);
-  }
-  }
-
-class Platformbl {
-  constructor() {
-    this.platformX = 10;
-    this.platformY = 10;
-  }
-  show() { 
-    fill(0, 100, 0);
-    rect(this.platformX + 400, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 500, this.platformY + 400, 100, 20, 20);
-    rect(this.platformX + 600, this.platformY + 350, 100, 20, 20);
-    rect(this.platformX + 800, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 900, this.platformY + 400, 100, 20, 20);
-    rect(this.platformX + 1000, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 1300, this.platformY + 350, 100, 20, 20);
-    rect(this.platformX + 1500, this.platformY + 450, 100, 20, 20);
-    rect(this.platformX + 1600, this.platformY + 400, 100, 20, 20);
-    rect(this.platformX + 1700, this.platformY + 350, 100, 20, 20);
-    rect(this.platformX + 1800, this.platformY + 300, 100, 20, 20);
-    rect(this.platformX + 1900, this.platformY + 400, 100, 20, 20);
-    image(imgBerlinerLuft, this.platformX + 650, this.platformY + 315, 30, 80);
-    image(imgTrashCan, this.platformX + 700, this.platformY + 500, 100, 100);
-    image(imgPills, this.platformX + 1550, this.platformY + 425, 80, 80);
-    image(imgShoppingbags,this.platformX + 1200, this.platformY + 500,100,100);
-  }
-
-  movement(funX, theY, lastTheY) {
-    if(
-      funX + 50>= this.platformX &&
-      funX <= this.platformX + 50 &&
-      theY >= this.platformY - 60 &&
-      theY + 50 <= this.platformY &&
-      theY >= lastTheY 
-    ) { 
-      //the bottom of the dog should be equal to the top Y value of the platform
-    }
-
-    //platform moves in the x direction
-    this.platformX = this.platformX - 3;
-  
-  }
-}
- 
