@@ -12,12 +12,12 @@ let state = "start";
 let gameState = true;
 let imgPoliceX = 84;
 let imgPoliceY = 440;  
-let timer = 120;
+let timer = 60;
 let score = 0; 
 
  
  
-   
+//The following 20 lines of code were adapted from  https://editor.p5js.org/cultho/sketches/JaIPBkLME
 //images
 function preload() {
     img = loadImage("ghetto1.png");
@@ -37,12 +37,13 @@ function preload() {
     imgTrashCan = loadImage("trash can.png");
     imgSkizze = loadImage("skizze.png");
     imgErgebnis = loadImage("ergebnis.png");
-    imgInstructions = loadImage("instructions1.png");
+    imgAnleitung = loadImage("anleitung.png");
     imgResult = loadImage ("result.png");
   
     //store images of background in an array
     images = [img, imgTwo, imgThree, imgFour];
   }
+
 
  
   class Platform{
@@ -62,15 +63,16 @@ function preload() {
     movement() {
       this.x -= velocityImage; 
       if (this.x < -100) { 
-          this.x += width + 100;
+          this.x += width;
       }
     }
 } 
-
 // created multiple platforms and its organization 
 for (let i = 0; i< 4; i++) {
     platforms [i] = new Platform (450 + 200 * i, 400 - 80 * i);
 }
+
+
 
 class Sausage {
   constructor (x, y) {
@@ -78,19 +80,25 @@ class Sausage {
     this.y = y;
     this.width = 50;
     this.height = 30;
+    this.collected = false;
   }
   show () {
+    if (!this.collected) { 
     image (imgSausage, this.x, this. y, this.width, this.height);
   }
+}
   //move with background
   movement() {
+    if (!this.collected) { // Only move if not collected
     this.x -= velocityImage; 
     if (this.x < -100) { 
-        this.x += width + 100;
+        this.x += width;
     }
   }
+}
 
 }
+
 
 
 class BadFeature {
@@ -108,10 +116,12 @@ class BadFeature {
   movement() {
     this.x -= velocityImage; 
     if (this.x < -100) { 
-        this.x += width + 100;
-    } 
+        this.x += width;
+    }  
   }
 } 
+
+
 
 class GoodFeature {
   constructor (x, y, img) {
@@ -133,10 +143,12 @@ class GoodFeature {
   movement() {
     this.x -= velocityImage; 
     if (this.x < -100) { 
-        this.x += width + 100;
+        this.x += width;
     } 
 }
 }
+
+
 
 class Dog {
     constructor (x, y) {
@@ -165,10 +177,11 @@ class Dog {
     this.y = 505;
     this.velocityY = 0;
     this.jumping = false;
-  }
-      
+  }  
 } 
-collision (platform) {
+
+// the following 12 lines were adapted with the help of Rebecca NMD first year
+     collision (platform) {
         // Check if the dog is landing on the platform
         if (
           this.x + this.width-40 > platform.x && // Dog is horizontally within the platform
@@ -186,43 +199,40 @@ collision (platform) {
 
 let dog = new Dog(300, 505);
 
+
+
+let px = 450;
+let py = 400;
+
 function setup() {
   createCanvas(885, 600);
   frameRate(30); // control the frame rate for smoother image changes
   for (let i = 0; i < 4; i++) {
-    platforms[i] = new Platform(450 + 200 * i, 400 - 80 * i);
+    platforms[i] = new Platform(px + 200 * i, py - 80 * i);
   }
-  for (let i = 0; i < 10; i++) {
+  for (let i = 0; i < 250; i++) {
     sausages[i] = new Sausage(400 + 100 * i, 510);
   }
   badFeatures.push(new BadFeature(400, 510, imgTrashCan));
   badFeatures.push(new BadFeature(700, 510, imgShoppingbags));
-  badFeatures.push(new BadFeature(1000, 510, imgPant));
-  badFeatures.push(new BadFeature(1300, 510, imgDynamite));
-  badFeatures.push(new BadFeature(1600, 510, imgConstruction));
+  badFeatures.push(new BadFeature(1300, 510, imgPant));
+  badFeatures.push(new BadFeature(2000, 510, imgDynamite));
+  badFeatures.push(new BadFeature(580, 510, imgConstruction));
 
-
-  goodFeatures.push(new GoodFeature(platforms[0].x + random(0, platforms[0].width - 50)+20, platforms[0].y - 35, imgPills)); 
-  goodFeatures.push(new GoodFeature(platforms[1].x + random(0, platforms[1].width - 50)+18, platforms[1].y - 50, imgClubmate));
-  goodFeatures.push(new GoodFeature(platforms[2].x + random(0, platforms[2].width - 50)+25, platforms[2].y - 80, imgBerlinerLuft));
-  goodFeatures.push(new GoodFeature(platforms[3].x + random(0, platforms[3].width - 50)+10, platforms[3].y - 50, imgClubmate)); 
-  //create good features on random platfroms
-  // let goodFeatureImages = [imgPills, imgBerlinerLuft, imgClubmate];
-  // for (let img of goodFeatureImages) {
-  //   let randomPlatform = random(platforms);
-  //   let x = randomPlatform.x + random(0, randomPlatform.width - 50); // Randomize within platform width
-  //   let y = randomPlatform.y - 100; // Place slightly above the platform
-  //   goodFeatures.push(new GoodFeature(x, y, img));
-  // }
+  goodFeatures.push(new GoodFeature(500, 350, imgPills));
+  goodFeatures.push(new GoodFeature(700, 280, imgClubmate));
+  goodFeatures.push(new GoodFeature(900, 150, imgBerlinerLuft));
 }
 
- 
 
+ 
 //start screen
 function startScreen() {
+  push();
+  imageMode(CENTER);
   background(255, 255, 255);
   //image Skizze of the Wiener
-  image(imgSkizze, 50, -10, 800, 500);
+  image(imgSkizze, 420, 230, 800, 500);
   //sausage
   fill(185, 70, 49); 
   noStroke();
@@ -248,24 +258,42 @@ function startScreen() {
   rect(420,530,100,50,20);
   fill(255);
   textSize(20);
-  text("rules",445,560);
+  text("rules",445,560); 
+  pop();
 } 
 // instruction screen
 function instructionScreen() {
-  image(imgInstructions,0,0,width,height);
+  push();
+  imageMode(CENTER);
+  image(imgAnleitung,445,300,width,height);
+  pop();
 }
+
+
 
 //game screen
 function gameScreen() {
-  
+   
+  // the folllwing 19 lines were adapted from https://chatgpt.com/share/675197b1-5e84-8001-9496-d369dd730ec4
+  imageMode(CENTER);
   offset -= velocityImage;
-  if (offset <= -width){
-    offset = 0;
+  if (offset <= -width){ 
+    offset += width;
     currentImageIndex = (currentImageIndex + 1) % images.length;
     nextImageIndex = (currentImageIndex + 1) % images.length;
-  }
+    goodFeatures = [];  
+    goodFeatures.push(new GoodFeature(500, 350, imgPills));
+    goodFeatures.push(new GoodFeature(700, 280, imgClubmate));
+    goodFeatures.push(new GoodFeature(900, 150, imgBerlinerLuft));
+    badFeatures = [];
+    badFeatures.push(new BadFeature(400, 510, imgTrashCan));
+    badFeatures.push(new BadFeature(700, 510, imgShoppingbags));
+    badFeatures.push(new BadFeature(900, 510, imgPant));
+    badFeatures.push(new BadFeature(1200, 510, imgDynamite));
+    badFeatures.push(new BadFeature(1500, 510, imgConstruction));
 
-imageMode(CENTER);
+  } 
+
 image(images[currentImageIndex], width/2 + offset, height/2, 950, 600);
 image(images[nextImageIndex], width + width/2 + offset, height/ 2, 950,600);
 image (imgPolice, imgPoliceX, imgPoliceY, 150, 200);
@@ -274,30 +302,38 @@ for (let platform of platforms){
     platform.show();
 } 
 
+
 //from the class
 dog.show();
 
-
+// The following 27 lines were adapted with the help of Bassima and Garrit
 for (let i = sausages.length - 1; i >= 0; i--) {
   sausages[i].movement();
-  sausages[i].show();
 
    // sausages when being eaten by the dog
    if (abs(dog.x - sausages[i].x) < 50 && abs(dog.y - sausages[i].y) < 30) {
-     sausages[i].x=-1000;
-     score += 1;
+    sausages[i].collected = true;
+    sausages.splice(i, 1);
+    // sausages[i].y=1000;
+    score += 1;
    }
   }
 for (let goodfeature of goodFeatures){
+
   if (abs(dog.x-goodfeature.x) < 50 && abs(dog.y-goodfeature.y)<30){
-    goodfeature.x=1000;
-    timer+=10;
-}}
+    goodFeatures.splice(goodFeatures.indexOf(goodfeature), 1);
+    timer+=3;
+}
+}
 for (let badfeature of badFeatures){
+  badfeature.movement(); 
+
   if (abs(dog.x-badfeature.x) < 50 && abs(dog.y-badfeature.y)<30){
-    badfeature.x=1000;
-    timer-=5; 
-}}
+    badFeatures.splice(badFeatures.indexOf(badfeature), 1);
+    timer-=10; 
+}
+}
+
 
   //counter
   // the following 10 and belonging lines of code were adapted from https://youtu.be/h8dHw1-WbAY?si=athmfyTw1v8b0p18 
@@ -315,6 +351,8 @@ for (let badfeature of badFeatures){
 }
 
    
+
+
 //results screen
 function resultScreen() {
   image(imgResult, 445, 300 ,width,height);
@@ -327,13 +365,18 @@ for (let platform of platforms){
 }
  
 } 
+function reset() {
+  timer = 60;
+  score = 0;
+}
+
+
 
 
 function draw() {
 
   if(timer <= 0){
     state = "result";
-    timer = 0;
   } 
 
   if (state === "start") {
@@ -342,6 +385,7 @@ function draw() {
     mechanics();
     gameScreen();
     for (let sausage of sausages) {
+      // sausage.movement();
       sausage.show();
     }
     for (let badFeature of badFeatures) {
@@ -354,10 +398,13 @@ function draw() {
     }
   } else if (state === "result") {
     resultScreen();
+    reset();
   } else if ( state === "rules") {
     instructionScreen();
   }
 } 
+
+
 
 
 //change beetween screens while clicking
@@ -369,7 +416,10 @@ function mouseClicked() {
     state = "game";
   }else if (state === "rules" && mouseX > 0 && mouseX < 885 && mouseY > 0 && mouseY < 600) {
     state = "start";
-  }else if (state === "result" && mouseX > 0 && mouseX < 885 && mouseY > 0 && mouseY < 600) {
+  }else if (state === "result") {
       state = "start";
   }
 }
+
+
+
