@@ -68,9 +68,9 @@ function preload() {
     }
 } 
 // created multiple platforms and its organization 
-for (let i = 0; i< 4; i++) {
-    platforms [i] = new Platform (450 + 200 * i, 400 - 80 * i);
-}
+// for (let i = 0; i < 4; i++) {
+//     platforms [i] = new Platform (450 + 100 * i, 400 - 80 * i);
+// }
 
 
 
@@ -158,6 +158,7 @@ class Dog {
         this.height = 100;
         this.velocityY= 0;
         this.gravity = 1;
+
         this.jumping = false;
     }
     show (){
@@ -222,6 +223,7 @@ function setup() {
   goodFeatures.push(new GoodFeature(500, 350, imgPills));
   goodFeatures.push(new GoodFeature(700, 280, imgClubmate));
   goodFeatures.push(new GoodFeature(900, 150, imgBerlinerLuft));
+  
 }
 
 
@@ -357,6 +359,9 @@ for (let badfeature of badFeatures){
 function resultScreen() {
   image(imgResult, 445, 300 ,width,height);
 }
+
+
+
 
 function mechanics() {
   dog.movement();
